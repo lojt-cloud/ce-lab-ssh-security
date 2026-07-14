@@ -1,0 +1,65 @@
+{
+    "SecurityGroups": [
+        {
+            "GroupId": "sg-07d5a0e5e49cfdcde",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "week2-web-server-sg"
+                },
+                {
+                    "Key": "Environment",
+                    "Value": "Development"
+                }
+            ],
+            "VpcId": "vpc-0538edaf54f84ae6d",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:743631836010:security-group/sg-07d5a0e5e49cfdcde",
+            "OwnerId": "743631836010",
+            "GroupName": "week2-web-server-sg",
+            "Description": "Security group for Week 2 lab - allows SSH and HTTP",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 80,
+                    "ToPort": 80,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "Description": "Public HTTP access",
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                },
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 22,
+                    "ToPort": 22,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "Description": "SSH from my IP",
+                            "CidrIp": "143.179.136.227/32"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        }
+    ]
+}

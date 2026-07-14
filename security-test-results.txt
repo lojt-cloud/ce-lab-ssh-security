@@ -1,0 +1,17 @@
+=== Security Group Test Results ===
+
+Test 1: SSH from allowed IP
+Command: ssh bootcamp-web
+Result: SUCCESS - connected, whoami confirmed ec2-user
+
+Test 2: HTTP from anywhere
+Command: curl -I http://54.163.11.40
+Result: SUCCESS - HTTP/1.1 200 OK
+
+Test 3: Ping (should be blocked)
+Command: ping <public-ip>
+Result: BLOCKED as expected - 2 packets transmitted, 0 received, 100% packet loss
+
+Test 4: Port 3306 (should be blocked)
+Command: nc -zv <public-ip> 3306
+Result: BLOCKED as expected - no response, manually interrupted after ~5-10 seconds

@@ -1,0 +1,16 @@
+=== SCP File Transfer Log ===
+
+1. Copy TO instance:
+Command: scp test-file.txt bootcamp-web:~/
+Verification: ssh bootcamp-web "cat ~/test-file.txt"
+Result: SUCCESS - "Hello from my computer!"
+
+2. Copy FROM instance:
+Command: scp bootcamp-web:~/instance-info.txt ./downloaded-info.txt
+Verification: cat downloaded-info.txt
+Result: SUCCESS - matched original instance-info.txt content
+
+3. Copy directory:
+Command: scp -r my-website bootcamp-web:~/
+Verification: ssh bootcamp-web "ls -la ~/my-website/"
+Result: SUCCESS - index.html and style.css both present, correct file sizes

@@ -1,0 +1,21 @@
+=== SSH Daemon Configuration Audit ===
+
+Command: sudo /usr/sbin/sshd -T | grep -i "passwordauthentication\|permitrootlogin\|pubkeyauthentication"
+
+Output:
+permitrootlogin without-password
+pubkeyauthentication yes
+passwordauthentication no
+
+=== Assessment ===
+
+| Setting                | Expected           | Actual              | Status |
+|-------------------------|--------------------|-----------------------|--------|
+| PasswordAuthentication  | no                 | no                    | PASS   |
+| PermitRootLogin         | without-password   | without-password      | PASS   |
+| PubkeyAuthentication    | yes                | yes                   | PASS   |
+
+All three security settings match the expected secure configuration.
+Password authentication is disabled, root login requires a key (never a
+password), and public key authentication is enabled - matching AWS's
+default hardened configuration for Amazon Linux 2023.
