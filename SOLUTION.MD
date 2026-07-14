@@ -1,16 +1,16 @@
 # SSH Connection and Security Best Practices Lab - Solution
 
-**Student Name:** [Your Name]  
-**Date Completed:** [Date]
+**Student Name:** Balint Lojt
+**Date Completed:** 14/07/2026
 
 ---
 
 ## Instance Details
 
-- **Instance ID:** [i-xxxxxxxxxxxxx]
-- **Public IP:** [x.x.x.x — redact if repo is public]
-- **Security Group:** [week2-web-server-sg]
-- **Key Pair:** [bootcamp-week2-key.pem]
+- **Instance ID:** i-0f1913ce72c45fb6b
+- **Public IP:** **.**.**.189
+- **Security Group:** week2-web-server-sg
+- **Key Pair:** bootcamp-week2-key.pem
 
 ---
 
@@ -20,8 +20,12 @@
 
 **My `~/.ssh/config`:**
 ```
-[Paste your host entry here]
-```
+Host bootcamp-web
+    HostName XX.XX.XX.XX
+    User ec2-user
+    IdentityFile ~/.ssh/bootcamp-week2-key.pem
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
 
 - [ ] Connected using the alias: `ssh bootcamp-web`
 
@@ -33,24 +37,29 @@
 
 | Test | Expected | Result |
 |------|----------|--------|
-| `ssh bootcamp-web` | ✅ Connects | [ ] |
-| `curl -I http://YOUR_PUBLIC_IP` | ✅ HTTP 200 | [ ] |
-| `ping YOUR_PUBLIC_IP` | ❌ Timeout | [ ] |
-| `nc -zv YOUR_PUBLIC_IP 3306` | ❌ Blocked | [ ] |
+| `ssh bootcamp-web` |  Connects | [ yes] |
+| `curl -I http://YOUR_PUBLIC_IP` |  HTTP 200 | [ yes] |
+| `ping YOUR_PUBLIC_IP` |  Timeout | [no]  |
+| `nc -zv YOUR_PUBLIC_IP 3306` |  Blocked | [no ] |
 
 **Why did ping and port 3306 fail?**
 
-[Your answer]
-
----
+Both failed for the same underlying reason: security groups work on a
+"default deny" model. Nothing is allowed through unless it's explicitly
+listed as an inbound rule. Ping uses ICMP, which was never added to the
+security group, so it's blocked. Port 3306 (MySQL) also has no rule for it,
+since I never intended to run a database on this instance - only SSH (22)
+and HTTP (80) were ever explicitly opened. This confirms the security group
+isn't accidentally more permissive than intended - only the ports I actually
+configured are reachable.
 
 ## Step 3: Modify Security Group Rules
 
 ![Security Group Edit](Screenshots/security-group-edit.png)
 
-- [ ] Added HTTPS rule (port 443, source 0.0.0.0/0)
-- [ ] Tested it — what happened? [Your answer]
-- [ ] Removed the HTTPS rule again
+- [X] Added HTTPS rule (port 443, source 0.0.0.0/0)
+- [X] Tested it — what happened? [Failed to connect to the given IP because I haven't created any HTTPS service]
+- [X] Removed the HTTPS rule again
 
 ---
 
@@ -58,29 +67,30 @@
 
 **What these settings do:**
 
-- `ServerAliveInterval 60` — [Your answer]
-- `ServerAliveCountMax 3` — [Your answer]
-- `TCPKeepAlive yes` — [Your answer]
-- `Compression yes` — [Your answer]
+- `ServerAliveInterval 60` — [Every 60 sec if I dont do anything in the ssh terminal it auto sends  a signal, it prevents that the session would close before I finish working in it.]
+- `ServerAliveCountMax 3` — [If the auto sending signal fails 3 times in a row, the terminal will be considered unresponsive and after that it just disconnects]
+- `TCPKeepAlive yes` — [Checks if the network is still up or disconnected, more of an extra step of protection]
+- `Compression yes` — [compresses the data that I send through SSH connection, it improves the response time on a slow connection or higher latency one]
 
 **Idle for 2 minutes — did the connection stay alive?** [Yes / No]
 
----
+Yes, Since I just setup the keep alive command that does it every 60 sec and only if it fails 3 times (180sec) in a row disconnects 
+
 
 ## Step 5: Practice SCP (Secure Copy)
 
 ![SCP File Transfer](Screenshots/scp-file-transfer.png)
 
-- [ ] Copied a file TO the instance
-- [ ] Copied a file FROM the instance
-- [ ] Copied a whole directory
+- [X] Copied a file TO the instance
+- [X] Copied a file FROM the instance
+- [X] Copied a whole directory
 
 **Commands I used:**
 ```bash
-[Paste your scp commands here]
-```
+scp test-file.txt bootcamp-web:~/
+scp bootcamp-web:~/instance-info.txt ./downloaded-info.txt
+scp -r my-website bootcamp-web:~/
 
----
 
 ## Step 6: Harden SSH Configuration (On Instance)
 
